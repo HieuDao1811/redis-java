@@ -37,8 +37,7 @@ public class ClientHandler implements Runnable {
           }
           else if (part.equalsIgnoreCase("ECHO") && i+2 < parts.length) {
             String echoMessage = parts[i+2];
-            String response = "$" + echoMessage.length() + "\r\n" + echoMessage + "\r\n";
-            output.write(RespEncoder.bulkString(response).getBytes());
+            output.write(RespEncoder.bulkString(echoMessage).getBytes());
             output.flush();
             break;
           } 
@@ -47,13 +46,11 @@ public class ClientHandler implements Runnable {
             String value = parts[i+4];
 
             if (i+8 < parts.length && parts[i+6].equalsIgnoreCase("PX")) {
-              long expiryMs = System.currentTimeMillis() + Long.parseLong(parts[i+6]);
-              DataStore.set(key, value, expiryMs);
+              DataStore.set(key, value, Long.parseLong(parts[i+8]));
             }
 
             else if (i+8 < parts.length && parts[i+6].equalsIgnoreCase("EX")) {
-              long expiryMs = System.currentTimeMillis() + Long.parseLong(parts[i+6]);
-              DataStore.set(key, value, expiryMs*1000);
+              DataStore.set(key, value, Long.parseLong(parts[i+8]) * 1000);
             }
             else {
               DataStore.set(key, value);
@@ -68,8 +65,7 @@ public class ClientHandler implements Runnable {
             String value = DataStore.get(key);
 
             if (value != null) {
-              String response = "$" + value.length() + "\r\n" + value + "\r\n";
-              output.write(RespEncoder.bulkString(response).getBytes());
+              output.write(RespEncoder.bulkString(value).getBytes());
             }
             else {
               String response = "$-1\r\n";
