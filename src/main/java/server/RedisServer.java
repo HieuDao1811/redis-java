@@ -19,7 +19,7 @@ public class RedisServer {
       
       while (true) {
         Socket clientSocket = serverSocket.accept();
-        new Thread(() -> new ClientHandler(clientSocket));
+        new Thread(new ClientHandler(clientSocket)).start();
       }
     } catch (IOException e) {
       System.err.println("Server error: " + e.getMessage());
