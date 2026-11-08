@@ -18,7 +18,7 @@ public class Main {
          // Wait for connection from client.
          clientSocket = serverSocket.accept();
          InputStream inputStream = clientSocket.getInputStream();
-         int buffer = new byte[1024];
+         byte buffer = new byte[1024];
          int bytesRead;
          while (bytesRead = inputStream.read(buffer) != -1) {
           clientSocket.getOutputStream().write("+PONG\r\n".getBytes());
