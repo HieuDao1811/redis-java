@@ -46,7 +46,18 @@ public class ClientHandler implements Runnable {
             String key = parts[i+2];
             String value = parts[i+4];
 
-            DataStore.set(key, value);
+            if (i+8 < parts.length && parts[i+6].equalsIgnoreCase("PX")) {
+              long expiryMs = System.currentTimeMillis() + Long.parseLong(parts[i+6]);
+              DataStore.set(key, value, expiryMs);
+            }
+
+            else if (i+8 < parts.length && parts[i+6].equalsIgnoreCase("EX")) {
+              long expiryMs = System.currentTimeMillis() + Long.parseLong(parts[i+6]);
+              DataStore.set(key, value, expiryMs*1000);
+            }
+            else {
+              DataStore.set(key, value);
+            }
 
             output.write(RespEncoder.simpleString("OK").getBytes()); 
             output.flush();
