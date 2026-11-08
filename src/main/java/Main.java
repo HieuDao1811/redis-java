@@ -9,7 +9,6 @@ public class Main {
     System.out.println("Logs from your program will appear here!");
 
        ServerSocket serverSocket = null;
-       Socket clientSocket = null;
        int port = 6379;
        try {
          serverSocket = new ServerSocket(port);
@@ -18,7 +17,7 @@ public class Main {
          serverSocket.setReuseAddress(true);
          // Wait for connection from client.
          while (true) {
-          clientSocket = serverSocket.accept();
+          Socket clientSocket = serverSocket.accept();
           new Thread(() -> handleClient(clientSocket)).start();
          }
        } catch (IOException e) {
