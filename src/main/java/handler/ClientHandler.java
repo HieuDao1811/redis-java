@@ -37,7 +37,7 @@ public class ClientHandler implements Runnable {
             break;
           }
           else if (part.equalsIgnoreCase("ECHO") && i+2 < parts.length) {
-            String echoMessage = part[i+2];
+            String echoMessage = parts[i+2];
             String response = "$" + echoMessage.length() + "\r\n" + echoMessage + "\r\n";
             output.write(response.getBytes());
             output.flush();
